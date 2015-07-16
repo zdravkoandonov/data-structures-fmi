@@ -2,9 +2,9 @@
 struct Node
 {
 	int data;
-	Node *next;
-	Node(int data, Node *next = NULL) :
-		data(data), next(next)
+	Node *left, *right;
+	Node(int data, Node *left = NULL, Node *right) :
+		data(data), left(left), right(right)
 	{
 	}
 };
