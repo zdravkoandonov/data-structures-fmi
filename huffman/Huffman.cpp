@@ -3,10 +3,12 @@
 //
 
 #include <queue>
+#include <sstream>
 #include "Huffman.h"
 
 using std::priority_queue;
 using std::vector;
+using std::stringstream;
 
 map<char, int> Huffman::buildOccurrenceTable(string input) {
     map<char, int> table;
@@ -56,5 +58,16 @@ void dfs(Tree *tree, int depth, string currentCode, map<char, string> &codeTable
 map<char, string> Huffman::buildCodeTable(Tree &tree) {
     map<char, string> codeTable;
     dfs(&tree, 0, "", codeTable);
+
     return  codeTable;
+}
+
+string Huffman::encode(string input, map<char, string> &codeTable) {
+    int inputSize = input.size();
+    stringstream encodedString;
+    for (int i = 0; i < inputSize; i++) {
+        encodedString << codeTable[input[i]];
+    }
+
+    return encodedString.str();
 }

@@ -20,6 +20,7 @@ public:
     static map<char, int> buildOccurrenceTable(string);
     static Tree& buildTree(map< char, int>&);
     static map<char, string> buildCodeTable(Tree&);
+    static string encode(string, map<char, string>&);
 };
 
 

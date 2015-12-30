@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Huffman.h"
 
+using std::cin;
 using std::cout;
 using std::endl;
 
@@ -16,12 +17,17 @@ void printMap(map<K, V> table) {
 }
 
 int main() {
-    map<char, int> table = Huffman::buildOccurrenceTable("ABRACADABRA");
+    string input;
+    cin >> input;
+
+    map<char, int> table = Huffman::buildOccurrenceTable(input);
     printMap(table);
     Tree &tree = Huffman::buildTree(table);
     cout << tree << endl;
     map<char, string> codeTable = Huffman::buildCodeTable(tree);
     printMap(codeTable);
+
+    cout << Huffman::encode(input, codeTable) << endl;
 
     return 0;
 }
