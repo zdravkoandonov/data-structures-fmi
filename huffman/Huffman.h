@@ -17,8 +17,9 @@ using std::priority_queue;
 
 class Huffman {
 public:
-    static Tree buildTree(map<char, int>);
-    static map<char, int> buildTable(string);
+    static map<char, int> buildOccurrenceTable(string);
+    static Tree& buildTree(map< char, int>&);
+    static map<char, string> buildCodeTable(Tree&);
 };
 
 

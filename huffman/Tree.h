@@ -12,13 +12,23 @@ using std::list;
 using std::ostream;
 
 class Tree {
-    int occurrences;
-    Tree *left, *right;
 public:
-    Tree(int occurrences);
+    int occurrences;
+    char symbol;
+    Tree *left, *right;
+    Tree(int, char);
     Tree(Tree&, Tree&);
-    bool operator<(const Tree&) const;
     friend ostream& operator<<(ostream&, const Tree&);
+};
+
+class TreeComparison
+{
+public:
+    // get the tree with least occurrences on top
+    bool operator() (const Tree *tree1, const Tree *tree2) const
+    {
+        return tree1->occurrences > tree2->occurrences;
+    }
 };
 
 
