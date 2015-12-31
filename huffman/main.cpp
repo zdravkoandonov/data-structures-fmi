@@ -17,8 +17,8 @@ void printMap(map<K, V> table) {
 }
 
 int main() {
-    string input;
-    cin >> input;
+    string input = "abracadabra";
+    //cin >> input;
 
     map<char, int> table = Huffman::buildOccurrenceTable(input);
     printMap(table);
@@ -28,6 +28,8 @@ int main() {
     printMap(codeTable);
 
     cout << Huffman::encode(input, codeTable) << endl;
+
+    cout << Huffman::decode(Huffman::encode(input, codeTable), tree) << endl;
 
     return 0;
 }

@@ -43,11 +43,11 @@ Tree& Huffman::buildTree(map<char, int> &table) {
     return *trees.top();
 }
 
-void dfs(Tree *tree, int depth, string currentCode, map<char, string> &codeTable) {
+void dfsCodeTable(Tree *tree, int depth, string currentCode, map<char, string> &codeTable) {
     if (tree) {
         if (tree->left && tree->right) {
-            dfs(tree->left, depth + 1, currentCode + '0', codeTable);
-            dfs(tree->right, depth + 1, currentCode + '1', codeTable);
+            dfsCodeTable(tree->left, depth + 1, currentCode + '0', codeTable);
+            dfsCodeTable(tree->right, depth + 1, currentCode + '1', codeTable);
         }
         else {
             codeTable.insert(pair<char, string>(tree->symbol, currentCode));
@@ -57,17 +57,38 @@ void dfs(Tree *tree, int depth, string currentCode, map<char, string> &codeTable
 
 map<char, string> Huffman::buildCodeTable(Tree &tree) {
     map<char, string> codeTable;
-    dfs(&tree, 0, "", codeTable);
+    dfsCodeTable(&tree, 0, "", codeTable);
 
     return  codeTable;
 }
 
-string Huffman::encode(string input, map<char, string> &codeTable) {
+string Huffman::encode(string input, const map<char, string> &codeTable) {
     int inputSize = input.size();
     stringstream encodedString;
     for (int i = 0; i < inputSize; i++) {
-        encodedString << codeTable[input[i]];
+        encodedString << codeTable.at(input[i]);
     }
 
     return encodedString.str();
+}
+
+
+string Huffman::decode(string input, const Tree &tree) {
+    int inputSize = input.size();
+    stringstream decodedString;
+    const Tree *currentNode = &tree;
+
+    for (int i = 0; i < inputSize; i++) {
+        if (input[i] == '0')
+            currentNode = currentNode->left;
+        else
+            currentNode = currentNode->right;
+
+        if (currentNode->left == NULL && currentNode->right == NULL) {
+            decodedString << currentNode->symbol;
+            currentNode = &tree;
+        }
+    }
+
+    return decodedString.str();
 }
