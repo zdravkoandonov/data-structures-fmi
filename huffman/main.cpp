@@ -16,6 +16,15 @@ void printMap(map<K, V> table) {
     }
 }
 
+template <typename T>
+void printVector(vector<T> v) {
+    int size = v.size();
+    for (int i = 0; i < size; i++) {
+        cout << v[i] << " ";
+    }
+    cout << endl;
+}
+
 int main() {
     string input = "abracadabra";
     //cin >> input;
@@ -27,9 +36,14 @@ int main() {
     map<char, string> codeTable = Huffman::buildCodeTable(tree);
     printMap(codeTable);
 
-    cout << Huffman::encode(input, codeTable) << endl;
+    string encoded = Huffman::encode(input, codeTable);
+    cout << encoded << endl;
 
-    cout << Huffman::decode(Huffman::encode(input, codeTable), tree) << endl;
+    cout << Huffman::decode(encoded, tree) << endl;
+
+    printVector(Huffman::groupEncoded8bit(encoded));
+
+    cout << Huffman::compressionRatio(input, encoded) << endl;
 
     return 0;
 }

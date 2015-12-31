@@ -7,8 +7,8 @@
 #include "Huffman.h"
 
 using std::priority_queue;
-using std::vector;
 using std::stringstream;
+using std::stoi;
 
 map<char, int> Huffman::buildOccurrenceTable(string input) {
     map<char, int> table;
@@ -91,4 +91,18 @@ string Huffman::decode(string input, const Tree &tree) {
     }
 
     return decodedString.str();
+}
+
+vector<int> Huffman::groupEncoded8bit(string input) {
+    int inputSize = input.size();
+    vector<int> numbers;
+    for (int i = 0; i < inputSize; i += 8) {
+        numbers.push_back(stoi(input.substr(i, 8), NULL, 2));
+    }
+
+    return numbers;
+}
+
+double Huffman::compressionRatio(string rawInput, string encoded) {
+    return encoded.size() / (rawInput.size() * 8.0);
 }

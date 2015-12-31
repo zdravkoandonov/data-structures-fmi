@@ -14,6 +14,7 @@ using std::map;
 using std::pair;
 using std::string;
 using std::priority_queue;
+using std::vector;
 
 class Huffman {
 public:
@@ -21,7 +22,9 @@ public:
     static Tree& buildTree(map< char, int>&);
     static map<char, string> buildCodeTable(Tree&);
     static string encode(string, const map<char, string>&);
+    static vector<int> groupEncoded8bit(string);
     static string decode(string, const Tree&);
+    static double compressionRatio(string, string);
 };
 
 
