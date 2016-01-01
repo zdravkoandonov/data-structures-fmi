@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <cstring>
 #include "Huffman.h"
 
 using std::cin;
@@ -28,42 +29,65 @@ void printVector(vector<T> v) {
     cout << endl;
 }
 
-int main() {
-    string input = "abracadabra1231231121";
-    //cin >> input;
+int main(int argc, char *argv[]) {
+    if (argc > 1) {
+        bool compress = true; // compress by default
+        string inputFileName, outputFileName;
+        for (int i = 1; i < argc; i++) {
+            if (strcmp(argv[i], "-c") == 0) {
+                compress = true;
+            }
+            else if (strcmp(argv[i], "-d") == 0) {
+                compress = false;
+            }
+            else if (strcmp(argv[i], "-i") == 0) {
+                inputFileName = argv[++i];
+            }
+            else if (strcmp(argv[i], "-o") == 0) {
+                outputFileName = argv[++i];
+            }
+        }
+        cout << compress << " " << inputFileName << " " << outputFileName << endl;
+    }
+    else {
+        // SOME TESTS
 
-    map<char, int> table = Huffman::buildOccurrenceTable(input);
-    printMap<char, int>(table);
-    Tree &tree = Huffman::buildTree(table);
-    cout << tree << endl;
-    map<char, string> codeTable = Huffman::buildCodeTable(tree);
-    printMap<char, string>(codeTable);
+        string input = "abracadabra1231231121";
+        //cin >> input;
 
-    string encoded = Huffman::encode(input, codeTable);
-    cout << encoded << endl;
+        map<char, int> table = Huffman::buildOccurrenceTable(input);
+        printMap<char, int>(table);
+        Tree &tree = Huffman::buildTree(table);
+        cout << tree << endl;
+        map<char, string> codeTable = Huffman::buildCodeTable(tree);
+        printMap<char, string>(codeTable);
 
-    cout << Huffman::decode(encoded, tree) << endl;
+        string encoded = Huffman::encode(input, codeTable);
+        cout << encoded << endl;
 
-    printVector(Huffman::groupEncoded8bit(encoded));
+        cout << Huffman::decode(encoded, tree) << endl;
 
-    cout << Huffman::compressionRatio(input, encoded) << endl;
+        printVector(Huffman::groupEncoded8bit(encoded));
 
-    Huffman::encodeToFile(input, "comp", "tree");
-    cout << "FROMFILE:: " << Huffman::decodeFromFile("comp", "tree") << " ::FROMFILE\n";
+        cout << Huffman::compressionRatio(input, encoded) << endl;
 
-    // Test serialization/deserialization of a huffman tree
-    ofstream outFile("export");
-    outFile << tree;
-    outFile.close();
+        Huffman::encodeToFile(input, "comp", "tree");
+        cout << "FROMFILE:: " << Huffman::decodeFromFile("comp", "tree") << " ::FROMFILE\n";
 
-    Tree *testTree;
-    ifstream inFile("export");
-    inFile >> testTree;
-    inFile.close();
+        // Test serialization/deserialization of a huffman tree
+        ofstream outFile("export");
+        outFile << tree;
+        outFile.close();
 
-    cout << *testTree;
+        Tree *testTree;
+        ifstream inFile("export");
+        inFile >> testTree;
+        inFile.close();
 
-    cout << "\nEND\n" << endl;
+        cout << *testTree;
+
+        cout << "\nEND\n" << endl;
+    }
 
     return 0;
 }
