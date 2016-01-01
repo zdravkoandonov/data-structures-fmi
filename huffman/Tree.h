@@ -6,10 +6,11 @@
 #define HUFFMAN_TREE_H
 
 #include <list>
-#include <ostream>
+#include <iostream>
 
 using std::list;
 using std::ostream;
+using std::istream;
 
 class Tree {
 public:
@@ -19,6 +20,7 @@ public:
     Tree(int, char);
     Tree(Tree&, Tree&);
     friend ostream& operator<<(ostream&, const Tree&);
+    friend istream& operator>>(istream&, Tree*&);
 };
 
 class TreeComparison

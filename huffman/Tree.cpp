@@ -16,13 +16,35 @@ Tree::Tree(Tree &tree1, Tree &tree2) {
     right = &tree2;
 }
 
-ostream &operator<<(ostream &out, const Tree &tree) {
-    out << tree.occurrences << " (";
-    if (tree.left != NULL)
-        out << *(tree.left);
-    if (tree.right != NULL)
-        out << *(tree.right);
-    out << ") ";
+ostream &operator<<(ostream &outputStream, const Tree &tree) {
+    outputStream << tree.occurrences << " ";
+    if (tree.symbol != '\0') {
+        outputStream << "'" << tree.symbol << " ";
+    }
+    else {
+        outputStream << *(tree.left);
+        outputStream << *(tree.right);
+    }
 
-    return out;
+    return outputStream;
+}
+
+istream &operator>>(istream &inputStream, Tree *&tree) {
+    char symbol;
+    int occurrences;
+    if (!inputStream.eof()) {
+        inputStream >> occurrences;
+        inputStream.ignore();
+        if (inputStream.peek() == '\'') {
+            inputStream.ignore();
+            inputStream >> symbol;
+            tree = new Tree(occurrences, symbol);
+        }
+        else {
+            tree = new Tree(occurrences, '\0');
+            inputStream >> tree->left >> tree->right;
+        }
+    }
+
+    return inputStream;
 }

@@ -4,11 +4,14 @@
 
 #include <queue>
 #include <sstream>
+#include <fstream>
 #include "Huffman.h"
 
 using std::priority_queue;
 using std::stringstream;
 using std::stoi;
+using std::ifstream;
+using std::ofstream;
 
 map<char, int> Huffman::buildOccurrenceTable(string input) {
     map<char, int> table;
@@ -63,7 +66,7 @@ map<char, string> Huffman::buildCodeTable(Tree &tree) {
 }
 
 string Huffman::encode(string input, const map<char, string> &codeTable) {
-    int inputSize = input.size();
+    unsigned long inputSize = input.size();
     stringstream encodedString;
     for (int i = 0; i < inputSize; i++) {
         encodedString << codeTable.at(input[i]);
@@ -72,9 +75,21 @@ string Huffman::encode(string input, const map<char, string> &codeTable) {
     return encodedString.str();
 }
 
+void Huffman::encodeToFile(string input, string compressedFileName, string treeFileName) {
+    map<char, int> table = Huffman::buildOccurrenceTable(input);
+    Tree &tree = Huffman::buildTree(table);
+    map<char, string> codeTable = Huffman::buildCodeTable(tree);
+
+    ofstream compressedFile(compressedFileName);
+    compressedFile << encode(input, codeTable);
+    compressedFile.close();
+
+    ofstream treeFile(treeFileName);
+    treeFile << tree;
+}
 
 string Huffman::decode(string input, const Tree &tree) {
-    int inputSize = input.size();
+    unsigned long inputSize = input.size();
     stringstream decodedString;
     const Tree *currentNode = &tree;
 
@@ -93,10 +108,35 @@ string Huffman::decode(string input, const Tree &tree) {
     return decodedString.str();
 }
 
+string Huffman::decodeFromFile(string compressedFileName, string treeFileName) {
+    Tree *tree;
+    ifstream treeFile(treeFileName);
+    treeFile >> tree;
+    treeFile.close();
+
+    ifstream compressedFile(compressedFileName);
+    stringstream decodedString;
+    const Tree *currentNode = tree;
+
+    while (!compressedFile.eof()) {
+        if (compressedFile.get() == '0')
+            currentNode = currentNode->left;
+        else
+            currentNode = currentNode->right;
+
+        if (currentNode->left == NULL && currentNode->right == NULL) {
+            decodedString << currentNode->symbol;
+            currentNode = tree;
+        }
+    }
+
+    return decodedString.str();
+}
+
 vector<int> Huffman::groupEncoded8bit(string input) {
-    int inputSize = input.size();
+    unsigned long inputSize = input.size();
     vector<int> numbers;
-    for (int i = 0; i < inputSize; i += 8) {
+    for (unsigned long i = 0; i < inputSize; i += 8) {
         numbers.push_back(stoi(input.substr(i, 8), NULL, 2));
     }
 

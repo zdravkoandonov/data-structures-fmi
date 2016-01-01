@@ -1,9 +1,12 @@
 #include <iostream>
+#include <fstream>
 #include "Huffman.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
+using std::ifstream;
+using std::ofstream;
 
 template <typename K, typename V>
 using MapIterator = typename map<K,V>::iterator;
@@ -18,7 +21,7 @@ void printMap(map<K, V> table) {
 
 template <typename T>
 void printVector(vector<T> v) {
-    int size = v.size();
+    unsigned long size = v.size();
     for (int i = 0; i < size; i++) {
         cout << v[i] << " ";
     }
@@ -26,7 +29,7 @@ void printVector(vector<T> v) {
 }
 
 int main() {
-    string input = "abracadabra";
+    string input = "abracadabra1231231121";
     //cin >> input;
 
     map<char, int> table = Huffman::buildOccurrenceTable(input);
@@ -44,6 +47,23 @@ int main() {
     printVector(Huffman::groupEncoded8bit(encoded));
 
     cout << Huffman::compressionRatio(input, encoded) << endl;
+
+    Huffman::encodeToFile(input, "comp", "tree");
+    cout << "FROMFILE:: " << Huffman::decodeFromFile("comp", "tree") << " ::FROMFILE\n";
+
+    // Test serialization/deserialization of a huffman tree
+    ofstream outFile("export");
+    outFile << tree;
+    outFile.close();
+
+    Tree *testTree;
+    ifstream inFile("export");
+    inFile >> testTree;
+    inFile.close();
+
+    cout << *testTree;
+
+    cout << "\nEND\n" << endl;
 
     return 0;
 }

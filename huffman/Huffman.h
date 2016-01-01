@@ -22,8 +22,10 @@ public:
     static Tree& buildTree(map< char, int>&);
     static map<char, string> buildCodeTable(Tree&);
     static string encode(string, const map<char, string>&);
+    static void encodeToFile(string, string, string);
     static vector<int> groupEncoded8bit(string);
     static string decode(string, const Tree&);
+    static string decodeFromFile(string, string);
     static double compressionRatio(string, string);
 };
 
