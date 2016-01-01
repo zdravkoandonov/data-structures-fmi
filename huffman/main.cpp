@@ -33,11 +33,11 @@ int main() {
     //cin >> input;
 
     map<char, int> table = Huffman::buildOccurrenceTable(input);
-    printMap(table);
+    printMap<char, int>(table);
     Tree &tree = Huffman::buildTree(table);
     cout << tree << endl;
     map<char, string> codeTable = Huffman::buildCodeTable(tree);
-    printMap(codeTable);
+    printMap<char, string>(codeTable);
 
     string encoded = Huffman::encode(input, codeTable);
     cout << encoded << endl;
