@@ -12,6 +12,7 @@ using std::stringstream;
 using std::stoi;
 using std::ifstream;
 using std::ofstream;
+using std::ios;
 
 map<char, int> Huffman::buildOccurrenceTable(string input) {
     map<char, int> table;
@@ -58,9 +59,32 @@ void dfsCodeTable(Tree *tree, int depth, string currentCode, map<char, string> &
     }
 }
 
+void dfsCodeTableBinary(Tree *tree, int depth, vector<bool> currentCode, map<char, vector<bool> > &codeTable) {
+    if (tree) {
+        if (tree->left && tree->right) {
+            currentCode.push_back(0);
+            dfsCodeTableBinary(tree->left, depth + 1, currentCode, codeTable);
+            currentCode.pop_back();
+            currentCode.push_back(1);
+            dfsCodeTableBinary(tree->right, depth + 1, currentCode, codeTable);
+            currentCode.pop_back();
+        }
+        else {
+            codeTable.insert(pair<char, vector<bool> >(tree->symbol, currentCode));
+        }
+    }
+}
+
 map<char, string> Huffman::buildCodeTable(Tree &tree) {
     map<char, string> codeTable;
     dfsCodeTable(&tree, 0, "", codeTable);
+
+    return  codeTable;
+}
+
+map<char, vector<bool> > Huffman::buildCodeTableBinary(Tree &tree) {
+    map<char, vector<bool> > codeTable;
+    dfsCodeTableBinary(&tree, 0, vector<bool>(), codeTable);
 
     return  codeTable;
 }
@@ -73,6 +97,17 @@ string Huffman::encode(string input, const map<char, string> &codeTable) {
     }
 
     return encodedString.str();
+}
+
+vector<bool> Huffman::encodeToBinary(string input, const map<char, vector<bool> > &codeTable) {
+    unsigned long inputSize = input.size();
+    vector<bool> output;
+    for (int i = 0; i < inputSize; i++) {
+        const vector<bool> *code = &codeTable.at(input[i]);
+        output.insert(output.end(), code->begin(), code->end());
+    }
+
+    return output;
 }
 
 void Huffman::encodeToFile(string input, string compressedFileName, string treeFileName) {
@@ -145,4 +180,23 @@ vector<int> Huffman::groupEncoded8bit(string input) {
 
 double Huffman::compressionRatio(string rawInput, string encoded) {
     return encoded.size() / (rawInput.size() * 8.0);
+}
+
+void Huffman::compress(string inputFileName, string outputFileName) {
+    ifstream inputFile(inputFileName, ios::binary);
+    string input;//(std::istreambuf_iterator<char>(inputFile), std::istreambuf_iterator<char>());
+    inputFile.close();
+
+    map<char, int> table = Huffman::buildOccurrenceTable(input);
+    Tree &tree = Huffman::buildTree(table);
+    map<char, vector<bool> > codeTable = Huffman::buildCodeTableBinary(tree);
+
+    ofstream outputFile(outputFileName, ios::binary);
+    outputFile << tree;
+    vector<bool> outputVector = Huffman::encodeToBinary(input, codeTable);
+    outputFile.close();
+}
+
+void Huffman::decompress(string inputFileName, string outputFileName) {
+
 }
