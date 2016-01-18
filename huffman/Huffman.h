@@ -21,12 +21,16 @@ public:
     static map<char, int> buildOccurrenceTable(string);
     static Tree& buildTree(map< char, int>&);
     static map<char, string> buildCodeTable(Tree&);
+    static map<char, vector<bool> > buildCodeTableBinary(Tree&);
     static string encode(string, const map<char, string>&);
+    static vector<bool> encodeToBinary(string, const map<char, vector<bool> >&);
     static void encodeToFile(string, string, string);
     static vector<int> groupEncoded8bit(string);
     static string decode(string, const Tree&);
     static string decodeFromFile(string, string);
     static double compressionRatio(string, string);
+    static void compress(string, string);
+    static void decompress(string, string);
 };
 
 

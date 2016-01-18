@@ -48,6 +48,13 @@ int main(int argc, char *argv[]) {
             }
         }
         cout << compress << " " << inputFileName << " " << outputFileName << endl;
+
+        if (compress) {
+
+        }
+        else {
+
+        }
     }
     else {
         // SOME TESTS
