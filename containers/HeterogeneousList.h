@@ -9,16 +9,28 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <queue>
 #include "HeterogeneousListContainer.h"
 
 using std::list;
 using std::ifstream;
 using std::string;
 using std::istringstream;
+using std::vector;
+using std::priority_queue;
 
 template <class T>
 class HeterogeneousList {
     list<HeterogeneousListContainer<T>*> containers;
+
+    class ContainerSizeComparer {
+    public:
+        bool operator() (HeterogeneousListContainer<T> *first, HeterogeneousListContainer<T> *second) {
+            return first->size() > second->size();
+        }
+    };
+    priority_queue<HeterogeneousListContainer<T>*, vector<HeterogeneousListContainer<T>*>, ContainerSizeComparer> smallestFirstContainers;
+
 public:
     HeterogeneousList(ifstream &input) {
         int containerType, tempNumber;
@@ -42,7 +54,15 @@ public:
                 container->addItem(tempNumber);
 
             containers.push_back(container);
+            smallestFirstContainers.push(container);
         }
+    }
+
+    void addItemLoadBalanced(const T item) {
+        HeterogeneousListContainer<T> *smallestContainer = smallestFirstContainers.top();
+        smallestFirstContainers.pop();
+        smallestContainer->addItem(item);
+        smallestFirstContainers.push(smallestContainer);
     }
 
     bool member(const T &x) {
@@ -51,6 +71,12 @@ public:
                 return true;
         }
         return false;
+    }
+
+    void print() {
+        for (auto it = containers.begin(); it != containers.end(); ++it) {
+            (*it)->print();
+        }
     }
 };
 

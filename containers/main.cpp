@@ -54,6 +54,16 @@ int main() {
     HeterogeneousList<int> hetList(input);
     cout << hetList.member(3) << endl; // 1
     cout << hetList.member(0) << endl; // 0
+    hetList.print();
+    cout << endl;
+    hetList.addItemLoadBalanced(10);
+    hetList.addItemLoadBalanced(11);
+    hetList.addItemLoadBalanced(12);
+    hetList.addItemLoadBalanced(13);
+    hetList.addItemLoadBalanced(14);
+    hetList.addItemLoadBalanced(15);
+    hetList.addItemLoadBalanced(16);
+    hetList.print();
 
     return 0;
 }

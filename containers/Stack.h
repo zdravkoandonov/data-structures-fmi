@@ -10,6 +10,7 @@
 template <class T>
 class Stack : public HeterogeneousListContainer<T> {
     DoublyLinkedList<T> container;
+
 public:
     Stack() {
         container = DoublyLinkedList<T>();
@@ -49,6 +50,10 @@ public:
 
     void print() {
         std::cout << *this;
+    }
+
+    int size() {
+        return container.size();
     }
 
     template <class P> friend ostream& operator<<(ostream&, const Stack<P>&);

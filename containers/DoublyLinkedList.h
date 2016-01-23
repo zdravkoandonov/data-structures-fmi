@@ -15,10 +15,13 @@ template <class T>
 class DoublyLinkedList : public HeterogeneousListContainer<T> {
     DoublyLinkedListNode<T> *front;
     DoublyLinkedListNode<T> *back;
+    int itemsCount;
+
 public:
     DoublyLinkedList() {
         front = nullptr;
         back = nullptr;
+        itemsCount = 0;
     }
 
     DoublyLinkedListNode<T> *begin() const {
@@ -36,6 +39,7 @@ public:
     bool insertAfter(DoublyLinkedListNode<T> *node, const T item) {
         if (empty()) {
             front = back = new DoublyLinkedListNode<T>(item);
+            itemsCount++;
             return true;
         }
 
@@ -49,12 +53,14 @@ public:
         else
             p->next->prev = p;
 
+        itemsCount++;
         return true;
     }
 
     bool insertBefore(DoublyLinkedListNode<T> *node, const T item) {
         if (empty()) {
             back = front = new DoublyLinkedListNode<T>(item);
+            itemsCount++;
             return true;
         }
 
@@ -68,14 +74,17 @@ public:
         else
             p->prev->next = p;
 
+        itemsCount++;
         return true;
     }
 
     bool insertFront(const T item) {
+        itemsCount++;
         return insertBefore(front, item);
     }
 
     bool insertBack(const T item) {
+        itemsCount++;
         return insertAfter(back, item);
     }
 
@@ -93,6 +102,7 @@ public:
             node->next->prev = node->prev;
 
         delete node;
+        itemsCount--;
     }
 
     bool member(const T& x) {
@@ -124,6 +134,10 @@ public:
 
     void print() {
         std::cout << *this;
+    }
+
+    int size() {
+        return itemsCount;
     }
 };
 
