@@ -65,5 +65,7 @@ int main() {
     hetList.addItemLoadBalanced(16);
     hetList.print();
 
+    cout << hetList.search([](int const& item) { return item % 16 == 0; }) << endl;
+
     return 0;
 }

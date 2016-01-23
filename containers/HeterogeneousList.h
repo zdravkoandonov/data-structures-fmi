@@ -31,6 +31,8 @@ class HeterogeneousList {
     };
     priority_queue<HeterogeneousListContainer<T>*, vector<HeterogeneousListContainer<T>*>, ContainerSizeComparer> smallestFirstContainers;
 
+    using Condition = bool (*)(T const&);
+
 public:
     HeterogeneousList(ifstream &input) {
         int containerType, tempNumber;
@@ -68,6 +70,14 @@ public:
     bool member(const T &x) {
         for (auto it = containers.begin(); it != containers.end(); ++it) {
             if ((*it)->member(x))
+                return true;
+        }
+        return false;
+    }
+
+    bool search(Condition predicate) {
+        for (auto it = containers.begin(); it != containers.end(); ++it) {
+            if ((*it)->search(predicate))
                 return true;
         }
         return false;

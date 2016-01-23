@@ -17,6 +17,8 @@ class DoublyLinkedList : public HeterogeneousListContainer<T> {
     DoublyLinkedListNode<T> *back;
     int itemsCount;
 
+    using Condition = bool (*)(T const&);
+
 public:
     DoublyLinkedList() {
         front = nullptr;
@@ -114,6 +116,25 @@ public:
             DoublyLinkedListNode<T> *currentNode = front;
             while (currentNode != nullptr) {
                 if (currentNode->data == x) {
+                    return true;
+                }
+                else {
+                    currentNode = currentNode->next;
+                }
+            }
+            return false;
+        }
+    }
+
+    bool search(Condition predicate) {
+        if (empty()) {
+            return false;
+        }
+        else
+        {
+            DoublyLinkedListNode<T> *currentNode = front;
+            while (currentNode != nullptr) {
+                if ((*predicate)(currentNode->data)) {
                     return true;
                 }
                 else {

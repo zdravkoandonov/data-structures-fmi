@@ -11,6 +11,8 @@ template <class T>
 class Queue : public HeterogeneousListContainer<T> {
     DoublyLinkedList<T> container;
 
+    using Condition = bool (*)(T const&);
+
 public:
     Queue() {
         container = DoublyLinkedList<T>();
@@ -38,6 +40,10 @@ public:
 
     bool member(const T &item) {
         return container.member(item);
+    }
+
+    bool search(Condition predicate) {
+        return  container.search(predicate);
     }
 
     void addItem(const T item) {
