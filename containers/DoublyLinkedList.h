@@ -19,11 +19,86 @@ class DoublyLinkedList : public HeterogeneousListContainer<T> {
 
     using Condition = bool (*)(T const&);
 
+    void copy(const DoublyLinkedList<T> &other) {
+        for (DoublyLinkedListNode<T> *it = other.begin(); it != nullptr; it = it->next)
+            insertBack(it->data);
+    }
+
+    void clean() {
+        while (!empty())
+            removeAt(end());
+    }
+
+    static void split(DoublyLinkedList<T> const& l, DoublyLinkedList<T>& l1, DoublyLinkedList<T>& l2) {
+        DoublyLinkedList<T> *first = &l1, *second = &l2;
+        for(DoublyLinkedListNode<T> *it = l.begin(); it != nullptr; it = it->next) {
+            first->insertBack(it->data);
+            std::swap(first, second);
+        }
+    }
+
+    static void merge(DoublyLinkedList<T> const& l1, DoublyLinkedList<T> const& l2, DoublyLinkedList<T>& l) {
+        DoublyLinkedListNode<T> *i1 = l1.begin(), *i2 = l2.begin();
+        while (i1 != nullptr && i2 != nullptr) {
+            if (i1->data < i2->data) {
+                l.insertBack(i1->data);
+                i1 = i1->next;
+            }
+            else {
+                l.insertBack(i2->data);
+                i2 = i2->next;
+            }
+        }
+        // !i1 || !i2
+        while (i1 != nullptr) {
+            l.insertBack(i1->data);
+            i1 = i1->next;
+        }
+        while (i2 != nullptr) {
+            l.insertBack(i2->data);
+            i2 = i2->next;
+        }
+    }
+
+    DoublyLinkedList<T> mergeSort() {
+        if (begin()->next == nullptr)
+            return *this;
+        // 1. разделяме
+        DoublyLinkedList<T> l1, l2;
+        split(*this, l1, l2);
+
+        // 2. рекурсивно сортираме
+        // 3. сливаме сортираните списъци
+        DoublyLinkedList<T> result;
+        merge(l1.mergeSort(), l2.mergeSort(), result);
+        return result;
+    }
+
 public:
     DoublyLinkedList() {
         front = nullptr;
         back = nullptr;
         itemsCount = 0;
+    }
+
+    DoublyLinkedList(const DoublyLinkedList<T> &other) {
+        front = nullptr;
+        back = nullptr;
+        itemsCount = 0;
+
+        copy(other);
+    }
+
+    DoublyLinkedList& operator=(const DoublyLinkedList<T> &other) {
+        if (this != &other) {
+            clean();
+            copy(other);
+        }
+        return *this;
+    }
+
+    ~DoublyLinkedList() {
+        clean();
     }
 
     DoublyLinkedListNode<T> *begin() const {
@@ -94,7 +169,7 @@ public:
         if (front == node) {
             front = node->next;
         }
-        else if (back == node) {
+        if (back == node) {
             back = node->prev;
         }
 
@@ -166,7 +241,7 @@ public:
     }
 
     void removeItem() {
-        removeAt(end());
+        removeAt(begin());
     }
 
     void print() {
@@ -175,6 +250,10 @@ public:
 
     int size() {
         return itemsCount;
+    }
+
+    void sort() {
+        *this = mergeSort();
     }
 };
 

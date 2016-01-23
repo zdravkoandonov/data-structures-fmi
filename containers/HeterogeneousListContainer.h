@@ -18,6 +18,7 @@ public:
     virtual void removeMatching(Condition) = 0;
     virtual void print() = 0;
     virtual int size() = 0;
+    virtual void sort() = 0;
 };
 
 

@@ -25,6 +25,8 @@ int main() {
 
     cout << l; // 16 4 17 3 2 10 1
     cout << l.member(x) << endl; // 1
+    l.sort();
+    cout << l; // 1 2 3 4 10 16 17
 
     Queue<int> q;
     cout << q.empty() << endl; // 1
@@ -66,6 +68,9 @@ int main() {
     hetList.print();
 
     cout << hetList.search([](int const& item) { return item % 16 == 0; }) << endl;
+
+    hetList.sortEachContainer();
+    hetList.print();
 
     hetList.removeMatching([](int const &item) { return item % 2 == 1; });
     hetList.print();

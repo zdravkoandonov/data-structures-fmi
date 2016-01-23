@@ -19,11 +19,11 @@ public:
     }
 
     void queue(const T item) {
-        container.insertFront(item);
+        container.insertBack(item);
     }
 
     T front() {
-        return container.end()->data;
+        return container.begin()->data;
     }
 
     bool empty() {
@@ -34,7 +34,7 @@ public:
         if (empty())
             return false;
 
-        container.removeAt(container.end());
+        container.removeAt(container.begin());
         return true;
     }
 
@@ -66,13 +66,17 @@ public:
         return container.size();
     }
 
+    void sort() {
+        container.sort();
+    }
+
     template <class P> friend ostream& operator<<(ostream&, const Queue<P>&);
 };
 
 template<class T>
 ostream& operator<<(ostream& os, const Queue<T> &l) {
     os << "> ";
-    for(DoublyLinkedListNode<T> *node = l.container.begin(); node != nullptr; node = node->next)
+    for(DoublyLinkedListNode<T> *node = l.container.end(); node != nullptr; node = node->prev)
         os << node->data << " > ";
     return os << std::endl;
 }

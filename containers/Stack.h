@@ -66,6 +66,10 @@ public:
         return container.size();
     }
 
+    void sort() {
+        container.sort();
+    }
+
     template <class P> friend ostream& operator<<(ostream&, const Stack<P>&);
 };
 

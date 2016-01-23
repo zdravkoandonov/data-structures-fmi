@@ -92,6 +92,11 @@ public:
         for (auto it = containers.begin(); it != containers.end(); ++it)
             (*it)->print();
     }
+
+    void sortEachContainer() {
+        for (auto it = containers.begin(); it != containers.end(); ++it)
+            (*it)->sort();
+    }
 };
 
 
