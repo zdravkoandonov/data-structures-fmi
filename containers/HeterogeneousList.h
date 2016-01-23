@@ -20,7 +20,13 @@ using std::vector;
 using std::priority_queue;
 
 template <class T>
+class HeterogeneousListIterator;
+
+template <class T>
 class HeterogeneousList {
+    template<class P>
+    friend class HeterogeneousListIterator;
+
     list<HeterogeneousListContainer<T>*> containers;
 
     class ContainerSizeComparer {
@@ -96,6 +102,17 @@ public:
     void sortEachContainer() {
         for (auto it = containers.begin(); it != containers.end(); ++it)
             (*it)->sort();
+    }
+
+    HeterogeneousListIterator<T> findInSorted(const T &item) {
+        HeterogeneousListIterator<T> it(*this);
+        while (it) {
+            if (item == *it)
+                return it;
+
+            ++it;
+        }
+        return HeterogeneousListIterator<T>();
     }
 };
 

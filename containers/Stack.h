@@ -18,6 +18,10 @@ public:
         container = DoublyLinkedList<T>();
     }
 
+    DoublyLinkedListNode<T> *begin() const {
+        return container.begin();
+    }
+
     void push(const T item) {
         container.insertFront(item);
     }

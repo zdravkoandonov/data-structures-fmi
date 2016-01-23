@@ -18,6 +18,10 @@ public:
         container = DoublyLinkedList<T>();
     }
 
+    DoublyLinkedListNode<T> *begin() const {
+        return container.begin();
+    }
+
     void queue(const T item) {
         container.insertBack(item);
     }

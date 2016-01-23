@@ -3,6 +3,7 @@
 #include "Queue.h"
 #include "Stack.h"
 #include "HeterogeneousList.h"
+#include "HeterogeneousListIterator.h"
 
 using std::cout;
 using std::endl;
@@ -74,6 +75,16 @@ int main() {
 
     hetList.removeMatching([](int const &item) { return item % 2 == 1; });
     hetList.print();
+
+    HeterogeneousListIterator<int> hetListIt(hetList);
+    for (; hetListIt; ++hetListIt)
+        cout << *hetListIt << " ";
+    cout << endl;
+
+    if (auto it = hetList.findInSorted(4))
+        cout << *it << endl;
+    else
+        cout << "Not found" << endl;
 
     return 0;
 }

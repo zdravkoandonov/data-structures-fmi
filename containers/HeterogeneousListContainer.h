@@ -6,6 +6,8 @@
 #define CONTAINERS_HETEROGENEOUSLISTITEM_H
 
 
+#include "DoublyLinkedListNode.h"
+
 template <class T>
 class HeterogeneousListContainer {
     using Condition = bool (*)(T const&);
@@ -19,6 +21,7 @@ public:
     virtual void print() = 0;
     virtual int size() = 0;
     virtual void sort() = 0;
+    virtual DoublyLinkedListNode<T>* begin() const = 0;
 };
 
 
