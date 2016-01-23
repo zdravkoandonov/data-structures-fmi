@@ -74,6 +74,14 @@ public:
         container.sort();
     }
 
+    void write(std::ofstream &output) {
+        output << "2 ";
+        for (auto it = container.end(); it != nullptr; it = it->prev) {
+            output << it->data << ' ';
+        }
+        output << std::endl;
+    }
+
     template <class P> friend ostream& operator<<(ostream&, const Stack<P>&);
 };
 

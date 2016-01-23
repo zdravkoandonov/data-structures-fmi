@@ -6,6 +6,7 @@
 #define CONTAINERS_DOUBLYLINKEDLIST_H
 
 #include <ostream>
+#include <fstream>
 #include "HeterogeneousListContainer.h"
 #include "DoublyLinkedListNode.h"
 
@@ -254,6 +255,14 @@ public:
 
     void sort() {
         *this = mergeSort();
+    }
+
+    void write(std::ofstream &output) {
+        output << "0 ";
+        for (auto it = begin(); it != nullptr; it = it->next) {
+            output << it->data << ' ';
+        }
+        output << std::endl;
     }
 };
 

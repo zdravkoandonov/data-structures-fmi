@@ -55,6 +55,12 @@ int main() {
 
     ifstream input("numbers");
     HeterogeneousList<int> hetList(input);
+    input.close();
+
+    ofstream outputRawTest("numbers.out");
+    hetList.writeOut(outputRawTest);
+    outputRawTest.close();
+
     cout << hetList.member(3) << endl; // 1
     cout << hetList.member(0) << endl; // 0
     hetList.print();
@@ -85,6 +91,15 @@ int main() {
         cout << *it << endl;
     else
         cout << "Not found" << endl;
+
+    ofstream output("numbers-changed.out");
+    hetList.writeOut(output);
+    output.close();
+
+    ifstream in("numbers-changed.out");
+    HeterogeneousList<int> hetList2(in);
+    hetList2.print();
+    in.close();
 
     return 0;
 }

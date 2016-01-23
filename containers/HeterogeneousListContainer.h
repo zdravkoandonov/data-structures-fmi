@@ -5,7 +5,7 @@
 #ifndef CONTAINERS_HETEROGENEOUSLISTITEM_H
 #define CONTAINERS_HETEROGENEOUSLISTITEM_H
 
-
+#include <fstream>
 #include "DoublyLinkedListNode.h"
 
 template <class T>
@@ -22,6 +22,7 @@ public:
     virtual int size() = 0;
     virtual void sort() = 0;
     virtual DoublyLinkedListNode<T>* begin() const = 0;
+    virtual void write(std::ofstream&) = 0;
 };
 
 

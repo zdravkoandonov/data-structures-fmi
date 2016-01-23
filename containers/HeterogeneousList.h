@@ -14,6 +14,7 @@
 
 using std::list;
 using std::ifstream;
+using std::ofstream;
 using std::string;
 using std::istringstream;
 using std::vector;
@@ -113,6 +114,11 @@ public:
             ++it;
         }
         return HeterogeneousListIterator<T>();
+    }
+
+    void writeOut(ofstream &output) {
+        for (auto it = containers.begin(); it != containers.end(); ++it)
+            (*it)->write(output);
     }
 };
 
