@@ -63,7 +63,7 @@ template<class T>
 ostream& operator<<(ostream& os, const Stack<T> &l) {
     for(DoublyLinkedListNode<T> *node = l.container.begin(); node != nullptr; node = node->next)
         os << node->data << ' ';
-    return os << std::endl;
+    return os << ']' << std::endl;
 }
 
 

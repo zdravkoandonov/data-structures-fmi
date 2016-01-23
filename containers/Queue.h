@@ -61,8 +61,9 @@ public:
 
 template<class T>
 ostream& operator<<(ostream& os, const Queue<T> &l) {
+    os << "> ";
     for(DoublyLinkedListNode<T> *node = l.container.begin(); node != nullptr; node = node->next)
-        os << node->data << ' ';
+        os << node->data << " > ";
     return os << std::endl;
 }
 
