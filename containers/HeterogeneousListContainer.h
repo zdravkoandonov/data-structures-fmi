@@ -15,6 +15,7 @@ public:
     virtual bool search(Condition) = 0;
     virtual void addItem(const T) = 0;
     virtual void removeItem() = 0;
+    virtual void removeMatching(Condition) = 0;
     virtual void print() = 0;
     virtual int size() = 0;
 };

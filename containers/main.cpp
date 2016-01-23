@@ -67,5 +67,8 @@ int main() {
 
     cout << hetList.search([](int const& item) { return item % 16 == 0; }) << endl;
 
+    hetList.removeMatching([](int const &item) { return item % 2 == 1; });
+    hetList.print();
+
     return 0;
 }

@@ -145,6 +145,22 @@ public:
         }
     }
 
+    void removeMatching(Condition predicate) {
+        DoublyLinkedListNode<T> *toDel = nullptr;
+        DoublyLinkedListNode<T> *it = begin();
+        while (it != nullptr) {
+            if ((*predicate)(it->data))
+                toDel = it;
+
+            it = it->next;
+
+            if (toDel != nullptr) {
+                removeAt(toDel);
+                toDel = nullptr;
+            }
+        }
+    }
+
     void addItem(const T item) {
         insertBack(item);
     }

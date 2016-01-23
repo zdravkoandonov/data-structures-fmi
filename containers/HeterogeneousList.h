@@ -83,10 +83,14 @@ public:
         return false;
     }
 
+    void removeMatching(Condition predicate) {
+        for (auto it = containers.begin(); it != containers.end(); ++it)
+            (*it)->removeMatching(predicate);
+    }
+
     void print() {
-        for (auto it = containers.begin(); it != containers.end(); ++it) {
+        for (auto it = containers.begin(); it != containers.end(); ++it)
             (*it)->print();
-        }
     }
 };
 

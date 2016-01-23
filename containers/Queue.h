@@ -46,6 +46,10 @@ public:
         return  container.search(predicate);
     }
 
+    void removeMatching(Condition predicate) {
+        container.removeMatching(predicate);
+    }
+
     void addItem(const T item) {
         queue(item);
     }
