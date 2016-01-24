@@ -91,8 +91,12 @@ public:
     }
 
     HeterogeneousList &operator=(const HeterogeneousList &other) {
-        clean();
-        copy(other);
+        if (this != &other) {
+            clean();
+            copy(other);
+        }
+
+        return *this;
     }
 
     ~HeterogeneousList() {
