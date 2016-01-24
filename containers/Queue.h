@@ -18,6 +18,10 @@ public:
         container = DoublyLinkedList<T>();
     }
 
+    HeterogeneousListContainer<T> *clone() const {
+        return new Queue<T>(*this);
+    }
+
     DoublyLinkedListNode<T> *begin() const {
         return container.begin();
     }

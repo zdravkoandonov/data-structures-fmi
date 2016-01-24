@@ -44,6 +44,21 @@ class HeterogeneousList {
 
     using Condition = bool (*)(T const&);
 
+    void clean() {
+        for (auto it = containers.begin(); it != containers.end(); ++it)
+            delete *it;
+    }
+
+    void copy(const HeterogeneousList<T> &other) {
+        containers = list<HeterogeneousListContainer<T>*>();
+        smallestFirstContainers = priority_queue<HeterogeneousListContainer<T>*, vector<HeterogeneousListContainer<T>*>, ContainerSizeComparer>();
+        for (auto it = other.containers.begin(); it != other.containers.end(); ++it) {
+            auto containerClone = (*it)->clone();
+            containers.push_back(containerClone);
+            smallestFirstContainers.push(containerClone);
+        }
+    }
+
 public:
     HeterogeneousList(ifstream &input) {
         int containerType, tempNumber;
@@ -69,6 +84,19 @@ public:
             containers.push_back(container);
             smallestFirstContainers.push(container);
         }
+    }
+
+    HeterogeneousList(const HeterogeneousList &other) {
+        copy(other);
+    }
+
+    HeterogeneousList &operator=(const HeterogeneousList &other) {
+        clean();
+        copy(other);
+    }
+
+    ~HeterogeneousList() {
+        clean();
     }
 
     void addItemLoadBalanced(const T item) {

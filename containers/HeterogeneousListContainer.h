@@ -13,6 +13,7 @@ class HeterogeneousListContainer {
     using Condition = bool (*)(T const&);
 
 public:
+    virtual HeterogeneousListContainer<T> *clone() const = 0;
     virtual bool member(const T&) = 0;
     virtual bool search(Condition) = 0;
     virtual void addItem(const T) = 0;

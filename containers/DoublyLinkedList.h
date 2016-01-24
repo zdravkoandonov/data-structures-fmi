@@ -102,6 +102,10 @@ public:
         clean();
     }
 
+    HeterogeneousListContainer<T> *clone() const {
+        return new DoublyLinkedList<T>(*this);
+    }
+
     DoublyLinkedListNode<T> *begin() const {
         return front;
     }

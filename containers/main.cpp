@@ -55,6 +55,7 @@ int main() {
 
     ifstream input("numbers");
     HeterogeneousList<int> hetList(input);
+    HeterogeneousList<int> hetListCopy(hetList);
     input.close();
 
     ofstream outputRawTest("numbers.out");
@@ -109,6 +110,11 @@ int main() {
     for (;hetListIt2; ++hetListIt2)
         cout << *hetListIt2 << " ";
     cout << endl;
+
+    HeterogeneousList<int> hetList2Copy(hetList2);
+    hetList2Copy.print();
+    hetList2Copy = hetListCopy;
+    hetList2Copy.print();
 
     return 0;
 }
