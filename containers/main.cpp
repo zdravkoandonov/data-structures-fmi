@@ -82,7 +82,7 @@ int main() {
     hetList.removeMatching([](int const &item) { return item % 2 == 1; });
     hetList.print();
 
-    HeterogeneousListIterator<int> hetListIt(hetList);
+    SortedHeterogeneousListIterator<int> hetListIt(hetList);
     for (; hetListIt; ++hetListIt)
         cout << *hetListIt << " ";
     cout << endl;
@@ -100,6 +100,15 @@ int main() {
     HeterogeneousList<int> hetList2(in);
     hetList2.print();
     in.close();
+
+    HeterogeneousListIterator<int> hetListIt1(hetList, true);
+    HeterogeneousListIterator<int> hetListIt2(hetList, false);
+    for (; hetListIt1; ++hetListIt1)
+        cout << *hetListIt1 << " ";
+    cout << endl;
+    for (;hetListIt2; ++hetListIt2)
+        cout << *hetListIt2 << " ";
+    cout << endl;
 
     return 0;
 }

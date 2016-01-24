@@ -22,11 +22,15 @@ using std::priority_queue;
 
 template <class T>
 class HeterogeneousListIterator;
+template <class T>
+class SortedHeterogeneousListIterator;
 
 template <class T>
 class HeterogeneousList {
     template<class P>
     friend class HeterogeneousListIterator;
+    template<class P>
+    friend class SortedHeterogeneousListIterator;
 
     list<HeterogeneousListContainer<T>*> containers;
 
@@ -105,15 +109,15 @@ public:
             (*it)->sort();
     }
 
-    HeterogeneousListIterator<T> findInSorted(const T &item) {
-        HeterogeneousListIterator<T> it(*this);
+    SortedHeterogeneousListIterator<T> findInSorted(const T &item) {
+        SortedHeterogeneousListIterator<T> it(*this);
         while (it) {
             if (item == *it)
                 return it;
 
             ++it;
         }
-        return HeterogeneousListIterator<T>();
+        return SortedHeterogeneousListIterator<T>();
     }
 
     void writeOut(ofstream &output) {

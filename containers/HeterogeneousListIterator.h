@@ -13,6 +13,7 @@ template <class T>
 class HeterogeneousListIterator {
     list<DoublyLinkedListNode<T>*> nodes;
     typename list<DoublyLinkedListNode<T>*>::iterator currentNodeIterator;
+    bool mode; // true: whole-container-items-first, false: containers-first-items-first
 
 public:
     HeterogeneousListIterator() {
@@ -21,7 +22,56 @@ public:
         currentNodeIterator = nodes.begin();
     }
 
-    HeterogeneousListIterator(HeterogeneousList<T> &heterogeneousList) {
+    HeterogeneousListIterator(HeterogeneousList<T> &heterogeneousList, bool mode) : mode(mode) {
+        for (auto it = heterogeneousList.containers.begin(); it != heterogeneousList.containers.end(); ++it)
+            nodes.push_back((*it)->begin());
+
+        currentNodeIterator = nodes.begin();
+    }
+
+    T& operator*() {
+        return (*currentNodeIterator)->data;
+    }
+
+    HeterogeneousListIterator &operator++() {
+        if (mode) {
+            *currentNodeIterator = (*currentNodeIterator)->next;
+            if ((*currentNodeIterator) == nullptr) {
+                ++currentNodeIterator;
+            }
+        }
+        else {
+            if ((*currentNodeIterator) != nullptr)
+                *currentNodeIterator = (*currentNodeIterator)->next;
+            ++currentNodeIterator;
+            if (currentNodeIterator == nodes.end())
+                currentNodeIterator = nodes.begin();
+
+            while (currentNodeIterator != nodes.end() && (*currentNodeIterator) == nullptr)
+                ++currentNodeIterator;
+        }
+
+        return *this;
+    }
+
+    operator bool() {
+        return currentNodeIterator != nodes.end() && (*currentNodeIterator) != nullptr;
+    }
+};
+
+template <class T>
+class SortedHeterogeneousListIterator {
+    list<DoublyLinkedListNode<T>*> nodes;
+    typename list<DoublyLinkedListNode<T>*>::iterator currentNodeIterator;
+
+public:
+    SortedHeterogeneousListIterator() {
+        // creates an invalid iterator
+        nodes.push_back(nullptr);
+        currentNodeIterator = nodes.begin();
+    }
+
+    SortedHeterogeneousListIterator(HeterogeneousList<T> &heterogeneousList) {
         auto it = heterogeneousList.containers.begin();
         nodes.push_back((*it)->begin());
         ++it;
@@ -38,7 +88,7 @@ public:
         return (*currentNodeIterator)->data;
     }
 
-    HeterogeneousListIterator &operator++() {
+    SortedHeterogeneousListIterator &operator++() {
         *currentNodeIterator = (*currentNodeIterator)->next;
 
         currentNodeIterator = nodes.begin();
