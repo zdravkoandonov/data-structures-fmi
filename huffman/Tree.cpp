@@ -5,8 +5,8 @@
 #include "Tree.h"
 
 Tree::Tree(int occurrences, char symbol) : occurrences(occurrences), symbol(symbol) {
-    left = NULL;
-    right = NULL;
+    left = nullptr;
+    right = nullptr;
 }
 
 Tree::Tree(Tree &tree1, Tree &tree2) {

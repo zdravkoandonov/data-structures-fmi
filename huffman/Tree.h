@@ -17,8 +17,10 @@ public:
     int occurrences;
     char symbol;
     Tree *left, *right;
+
     Tree(int, char);
     Tree(Tree&, Tree&);
+
     friend ostream& operator<<(ostream&, const Tree&);
     friend istream& operator>>(istream&, Tree*&);
 };

@@ -1,24 +1,13 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include "Huffman.h"
+#include "HuffmanTree.h"
 
 using std::cin;
 using std::cout;
 using std::endl;
 using std::ifstream;
 using std::ofstream;
-
-template <typename K, typename V>
-using MapIterator = typename map<K,V>::iterator;
-
-template <typename K, typename V>
-void printMap(map<K, V> table) {
-    MapIterator<K, V> tableIterator = table.begin();
-    for (; tableIterator != table.end(); tableIterator++) {
-        cout << tableIterator->first << " " << tableIterator->second << endl;
-    }
-}
 
 template <typename T>
 void printVector(vector<T> v) {
@@ -55,28 +44,23 @@ int main(int argc, char *argv[]) {
         string input = "abracadabra1231231121";
         //cin >> input;
 
-        map<char, int> table = Huffman::buildOccurrenceTable(input);
-        printMap<char, int>(table);
-        Tree &tree = Huffman::buildTree(table);
-        cout << tree << endl;
-        map<char, string> codeTable = Huffman::buildCodeTable(tree);
-        printMap<char, string>(codeTable);
+        HuffmanTree huffmanTree(input);
 
-        string encoded = Huffman::encode(input, codeTable);
+        string encoded = huffmanTree.encode(input);
         cout << encoded << endl;
 
-        cout << Huffman::decode(encoded, tree) << endl;
+        cout << huffmanTree.decode(encoded) << endl;
 
-        printVector(Huffman::groupEncoded8bit(encoded));
+        printVector(huffmanTree.groupEncoded8bit(encoded));
 
-        cout << Huffman::compressionRatio(input, encoded) << endl;
+        cout << huffmanTree.compressionRatio(input, encoded) << endl;
 
-        Huffman::encodeToFile(input, "comp", "tree");
-        cout << "FROMFILE:: " << Huffman::decodeFromFile("comp", "tree") << " ::FROMFILE\n";
+        huffmanTree.encodeToFile(input, "comp", "tree");
+        cout << "FROMFILE:: " << huffmanTree.decodeFromFile("comp", "tree") << " ::FROMFILE\n";
 
-        // Test serialization/deserialization of a huffman tree
+        // Test serialization/deserialization of a HuffmanTree tree
         ofstream outFile("export");
-        outFile << tree;
+        outFile << huffmanTree;
         outFile.close();
 
         Tree *testTree;

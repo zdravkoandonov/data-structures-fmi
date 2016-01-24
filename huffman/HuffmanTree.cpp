@@ -5,15 +5,21 @@
 #include <queue>
 #include <sstream>
 #include <fstream>
-#include "Huffman.h"
+#include "HuffmanTree.h"
 
 using std::priority_queue;
 using std::stringstream;
 using std::stoi;
-using std::ifstream;
 using std::ofstream;
+using std::ifstream;
 
-map<char, int> Huffman::buildOccurrenceTable(string input) {
+HuffmanTree::HuffmanTree(string s) {
+    occurrenceTable = buildOccurrenceTable(s);
+    tree = buildTree();
+    codeTable = buildCodeTable();
+}
+
+map<char, int> HuffmanTree::buildOccurrenceTable(string input) {
     map<char, int> table;
     map<char, int>::iterator tableIterator;
     unsigned long inputSize = input.size();
@@ -28,10 +34,10 @@ map<char, int> Huffman::buildOccurrenceTable(string input) {
     return table;
 }
 
-Tree& Huffman::buildTree(map<char, int> &table) {
+Tree* HuffmanTree::buildTree() {
     priority_queue<Tree*, vector<Tree*>, TreeComparison> trees;
-    auto tableIterator = table.begin();
-    for (; tableIterator != table.end(); tableIterator++) {
+    auto tableIterator = occurrenceTable.begin();
+    for (; tableIterator != occurrenceTable.end(); tableIterator++) {
         trees.push(new Tree(tableIterator->second, tableIterator->first));
     }
     while (trees.size() > 1) {
@@ -43,10 +49,10 @@ Tree& Huffman::buildTree(map<char, int> &table) {
         trees.push(new Tree(*tree1, *tree2));
     }
 
-    return *trees.top();
+    return trees.top();
 }
 
-void dfsCodeTable(Tree *tree, int depth, string currentCode, map<char, string> &codeTable) {
+void HuffmanTree::dfsCodeTable(Tree *tree, int depth, string currentCode, map<char, string> &codeTable) {
     if (tree) {
         if (tree->left && tree->right) {
             dfsCodeTable(tree->left, depth + 1, currentCode + '0', codeTable);
@@ -58,14 +64,14 @@ void dfsCodeTable(Tree *tree, int depth, string currentCode, map<char, string> &
     }
 }
 
-map<char, string> Huffman::buildCodeTable(Tree &tree) {
+map<char, string> HuffmanTree::buildCodeTable() {
     map<char, string> codeTable;
-    dfsCodeTable(&tree, 0, "", codeTable);
+    dfsCodeTable(tree, 0, "", codeTable);
 
     return  codeTable;
 }
 
-string Huffman::encode(string input, const map<char, string> &codeTable) {
+string HuffmanTree::encode(string input) {
     unsigned long inputSize = input.size();
     stringstream encodedString;
     for (int i = 0; i < inputSize; i++) {
@@ -75,23 +81,19 @@ string Huffman::encode(string input, const map<char, string> &codeTable) {
     return encodedString.str();
 }
 
-void Huffman::encodeToFile(string input, string compressedFileName, string treeFileName) {
-    map<char, int> table = Huffman::buildOccurrenceTable(input);
-    Tree &tree = Huffman::buildTree(table);
-    map<char, string> codeTable = Huffman::buildCodeTable(tree);
-
+void HuffmanTree::encodeToFile(string input, string compressedFileName, string treeFileName) {
     ofstream compressedFile(compressedFileName);
-    compressedFile << encode(input, codeTable);
+    compressedFile << encode(input);
     compressedFile.close();
 
     ofstream treeFile(treeFileName);
-    treeFile << tree;
+    treeFile << *tree;
 }
 
-string Huffman::decode(string input, const Tree &tree) {
+string HuffmanTree::decode(string input) {
     unsigned long inputSize = input.size();
     stringstream decodedString;
-    const Tree *currentNode = &tree;
+    const Tree *currentNode = tree;
 
     for (int i = 0; i < inputSize; i++) {
         if (input[i] == '0')
@@ -99,16 +101,16 @@ string Huffman::decode(string input, const Tree &tree) {
         else
             currentNode = currentNode->right;
 
-        if (currentNode->left == NULL && currentNode->right == NULL) {
+        if (currentNode->left == nullptr && currentNode->right == nullptr) {
             decodedString << currentNode->symbol;
-            currentNode = &tree;
+            currentNode = tree;
         }
     }
 
     return decodedString.str();
 }
 
-string Huffman::decodeFromFile(string compressedFileName, string treeFileName) {
+string HuffmanTree::decodeFromFile(string compressedFileName, string treeFileName) {
     Tree *tree;
     ifstream treeFile(treeFileName);
     treeFile >> tree;
@@ -124,7 +126,7 @@ string Huffman::decodeFromFile(string compressedFileName, string treeFileName) {
         else
             currentNode = currentNode->right;
 
-        if (currentNode->left == NULL && currentNode->right == NULL) {
+        if (currentNode->left == nullptr && currentNode->right == nullptr) {
             decodedString << currentNode->symbol;
             currentNode = tree;
         }
@@ -133,16 +135,28 @@ string Huffman::decodeFromFile(string compressedFileName, string treeFileName) {
     return decodedString.str();
 }
 
-vector<int> Huffman::groupEncoded8bit(string input) {
-    unsigned long inputSize = input.size();
+vector<int> HuffmanTree::groupEncoded8bit(string encoded) {
+    unsigned long inputSize = encoded.size();
     vector<int> numbers;
     for (unsigned long i = 0; i < inputSize; i += 8) {
-        numbers.push_back(stoi(input.substr(i, 8), NULL, 2));
+        numbers.push_back(stoi(encoded.substr(i, 8), nullptr, 2));
     }
 
     return numbers;
 }
 
-double Huffman::compressionRatio(string rawInput, string encoded) {
+double HuffmanTree::compressionRatio(string rawInput, string encoded) {
     return encoded.size() / (rawInput.size() * 8.0);
+}
+
+ostream &operator<<(ostream &outputStream, const HuffmanTree &huffmanTree) {
+    outputStream << *(huffmanTree.tree);
+
+    return outputStream;
+}
+
+istream &operator>>(istream &inputStream, HuffmanTree &huffmanTree) {
+    inputStream >> huffmanTree.tree;
+
+    return inputStream;
 }
