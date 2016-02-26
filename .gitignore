@@ -31,3 +31,8 @@
 *.sdf
 *.opensdf
 
+# CLion local project settings
+.idea
+
+# Build/Debug directories
+build
