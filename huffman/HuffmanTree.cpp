@@ -88,6 +88,7 @@ void HuffmanTree::encodeToFile(string input, string compressedFileName, string t
 
     ofstream treeFile(treeFileName);
     treeFile << *tree;
+    treeFile.close();
 }
 
 string HuffmanTree::decode(string input) {
